@@ -105,7 +105,7 @@ const ThemeToggle = ({ theme, setTheme }) => {
           key={mode.id}
           onClick={() => setTheme(mode.id)}
           className={`w-7 h-7 flex items-center justify-center rounded-full transition-all duration-200 ${theme === mode.id
-            ? 'bg-white dark:bg-zinc-600 text-indigo-600 dark:text-indigo-400 shadow-sm'
+            ? 'bg-white dark:bg-zinc-600 text-indigo-600 dark:text-indigo-400 shadow-xs'
             : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300'
             }`}
         >
@@ -249,7 +249,7 @@ export default function Home() {
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="peer w-full pl-2 pr-2 pt-5 pb-2 text-sm bg-zinc-50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700 rounded-t-lg focus:bg-zinc-100 dark:focus:bg-zinc-800 focus:border-indigo-500 outline-none transition-all placeholder-transparent text-zinc-800 dark:text-zinc-200"
+        className="peer w-full pl-2 pr-2 pt-5 pb-2 text-sm bg-zinc-50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700 rounded-t-lg focus:bg-zinc-100 dark:focus:bg-zinc-800 focus:border-indigo-500 outline-hidden transition-all placeholder-transparent text-zinc-800 dark:text-zinc-200"
         placeholder={placeholder}
       />
       <label className="absolute left-2 top-1.5 text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-xs peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-indigo-500">
@@ -284,7 +284,7 @@ export default function Home() {
       <div className="hidden lg:block flex-1 w-full" />
 
       {/* Main Card */}
-      <div className="w-full max-w-6xl h-auto min-h-screen lg:min-h-0 lg:h-[88vh] bg-white dark:bg-zinc-900 lg:rounded-[2rem] shadow-none lg:shadow-2xl lg:shadow-zinc-200/50 lg:dark:shadow-black/80 overflow-hidden border-none lg:border border-zinc-100 dark:border-zinc-800 transition-all duration-500 flex flex-col">
+      <div className="w-full max-w-6xl h-auto min-h-screen lg:min-h-0 lg:h-[88vh] bg-white dark:bg-zinc-900 lg:rounded-4xl shadow-none lg:shadow-2xl lg:shadow-zinc-200/50 lg:dark:shadow-black/80 overflow-hidden border-none lg:border border-zinc-100 dark:border-zinc-800 transition-all duration-500 flex flex-col">
 
         {/* Header */}
         <header className="shrink-0 px-6 lg:px-8 py-5 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 sticky top-0 z-30 lg:static">
@@ -354,7 +354,7 @@ export default function Home() {
                   />
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-20 pointer-events-none">
-                    <div className="p-4 bg-white/80 dark:bg-black/60 backdrop-blur-sm rounded-2xl flex flex-col items-center gap-2">
+                    <div className="p-4 bg-white/80 dark:bg-black/60 backdrop-blur-xs rounded-2xl flex flex-col items-center gap-2">
                       <Upload className="w-8 h-8 text-zinc-400" />
                       <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">{t.clickToUpload}</span>
                     </div>
@@ -471,7 +471,7 @@ export default function Home() {
                 {resultHtml && (
                   <button
                     onClick={copyToClipboard}
-                    className="px-2.5 py-1 text-[10px] font-bold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 rounded transition-colors flex items-center gap-1.5"
+                    className="px-2.5 py-1 text-[10px] font-bold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 rounded-sm transition-colors flex items-center gap-1.5"
                   >
                     {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
                     {copied ? t.copied : t.copy}
