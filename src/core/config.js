@@ -6,7 +6,7 @@ export const APP_DEFAULTS = {
   shortName: "App",
   
   // 颜色配置
-  brand: "#0071e3",    // 品牌色 (Azure Blue)
+  brand: "#ffffff",    // 品牌色 (Azure Blue: #0071e3)
 
   // 颜色配置
   // 1. 如果设置为 'original' 或 null，则保留 SVG 的原始颜色

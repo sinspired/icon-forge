@@ -25,7 +25,8 @@ export function useIconForge(t) {
 
     const generateHtmlSnippet = () => {
         return `<!-- PWA & Icons -->
-<meta name="theme-color" content="${config.brand}">
+<meta name="theme-color" content="${config.brand}" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 
 <!-- Favicon -->
 <link rel="icon" href="/favicon.ico" sizes="any">

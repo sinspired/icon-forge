@@ -47,12 +47,19 @@ async function run() {
   }
   await fs.copy(INPUT_PATH, path.join(OUT_DIR, "favicon.svg"));
 
+  let manifestBg = argv.bg;
+
+  if (!manifestBg || manifestBg === 'transparent') {
+    // 如果是透明背景图标，启动屏通常设为白色或品牌色
+    manifestBg = '#ffffff';
+  }
+
   const manifest = {
     name: argv.name,
     short_name: argv.short,
     start_url: "/",
     display: "standalone",
-    background_color: argv.bg,
+    background_color: manifestBg,
     theme_color: argv.brand,
     icons: [
       { src: `${ICONS_SUBDIR}/android-192.png`, sizes: "192x192", type: "image/png", purpose: "any" },
@@ -65,14 +72,15 @@ async function run() {
 
   const headHtml = `
 <!-- PWA & Icons -->
-<meta name="theme-color" content="${argv.brand}">
+<meta name="theme-color" content="${argv.brand}" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="${ICONS_SUBDIR}/favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" type="image/png" href="${ICONS_SUBDIR}/icon-32.png" sizes="32x32">
 <link rel="apple-touch-icon" href="${ICONS_SUBDIR}/apple-touch-icon.png">
 <link rel="manifest" href="manifest.json">
 `;
-  
+
   await fs.writeFile(path.join(OUT_DIR, "head-snippet.html"), headHtml.trim());
   console.log(`✅ 完成!`);
 }

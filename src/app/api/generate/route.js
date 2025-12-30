@@ -1,15 +1,15 @@
-import { generateIcons } from "../../../core/generator.js"; 
+import { generateIcons } from "../../../core/generator.js";
 import { APP_DEFAULTS } from "../../../core/config.js";
 import JSZip from "jszip";
 
 // 强制使用 Node.js Runtime
-export const runtime = 'nodejs'; 
+export const runtime = 'nodejs';
 
 export async function POST(req) {
   try {
     const formData = await req.formData();
     const file = formData.get("file");
-    
+
     // 获取参数，如果未提供则使用 APP_DEFAULTS
     const appName = formData.get("name") || APP_DEFAULTS.name;
     const appShortName = formData.get("short_name") || APP_DEFAULTS.shortName;
@@ -37,17 +37,25 @@ export async function POST(req) {
     const zip = new JSZip();
     const iconsFolder = zip.folder("icons");
     for (const [name, buffer] of Object.entries(images)) {
-       if (name === 'favicon.ico') zip.file(name, buffer);
-       else iconsFolder.file(name, buffer);
+      if (name === 'favicon.ico') zip.file(name, buffer);
+      else iconsFolder.file(name, buffer);
     }
     zip.file("favicon.svg", svgBuffer);
+
+
+    let manifestBg = bg;
+
+    if (!manifestBg || manifestBg === 'transparent') {
+      // 如果是透明背景图标，启动屏通常设为白色或品牌色
+      manifestBg = '#ffffff';
+    }
 
     const manifest = {
       name: appName,
       short_name: appShortName,
       start_url: "/",
       display: "standalone",
-      background_color: bg,
+      background_color: manifestBg,
       theme_color: brand,
       icons: [
         { src: "icons/android-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
@@ -59,7 +67,8 @@ export async function POST(req) {
     zip.file("manifest.json", JSON.stringify(manifest, null, 2));
 
     const htmlSnippet = `
-<meta name="theme-color" content="${brand}">
+<meta name="theme-color" content="${brand}" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="icon" type="image/png" href="/icons/icon-32.png" sizes="32x32">
