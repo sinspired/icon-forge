@@ -24,6 +24,17 @@ export default function Home() {
     setConfig, handleFileChange, handleSubmit, resetAll
   } = useIconForge(t);
 
+  // 背景处理：
+  // 1. 如果没有预览图 (!preview) -> 强制透明
+  // 2. 如果用户配置为透明 -> 强制透明
+  // 3. 否则 -> 显示配置的颜色
+  const bgStyle = (!preview || config.bg === 'transparent')
+    ? { backgroundColor: 'transparent' } 
+    : { backgroundColor: config.bg };
+
+  // 图标处理
+  const isOriginalColor = config.fg === 'original';
+
   // 主题应用逻辑
   useEffect(() => {
     const root = window.document.documentElement;
@@ -90,19 +101,32 @@ export default function Home() {
 
                 {/* 背景色层 */}
                 <div className="absolute inset-0 rounded-[2.5rem] shadow-2xl transition-colors duration-300 z-10"
-                  style={{ backgroundColor: preview ? config.bg : 'transparent' }}
+                  style={bgStyle}
                 />
 
                 {/* Mask 图标层 */}
                 {preview ? (
-                  <div className="absolute inset-0 transition-colors duration-300 z-20"
-                    style={{
-                      backgroundColor: config.fg,
-                      maskImage: `url(${preview})`, maskSize: '60%', maskRepeat: 'no-repeat', maskPosition: 'center',
-                      WebkitMaskImage: `url(${preview})`, WebkitMaskSize: '60%', WebkitMaskRepeat: 'no-repeat', WebkitMaskPosition: 'center'
-                    }}
-                  />
+                  isOriginalColor ? (
+                    // 原色模式 (Original) - 直接显示 img，居中 contain
+                    <div className="absolute inset-0 z-20 p-[20%] flex items-center justify-center pointer-events-none">
+                      <img
+                        src={preview}
+                        alt="Preview"
+                        className="w-full h-full object-contain drop-shadow-sm"
+                      />
+                    </div>
+                  ) : (
+                    // 单色模式 (Tint) - 使用 Mask 遮罩技术着色
+                    <div className="absolute inset-0 transition-colors duration-300 z-20 pointer-events-none"
+                      style={{
+                        backgroundColor: config.fg,
+                        maskImage: `url(${preview})`, maskSize: '60%', maskRepeat: 'no-repeat', maskPosition: 'center',
+                        WebkitMaskImage: `url(${preview})`, WebkitMaskSize: '60%', WebkitMaskRepeat: 'no-repeat', WebkitMaskPosition: 'center'
+                      }}
+                    />
+                  )
                 ) : (
+                  // 空状态
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-20 pointer-events-none text-zinc-400">
                     <div className="p-4 bg-white/80 dark:bg-black/60 backdrop-blur-xs rounded-2xl flex flex-col items-center gap-2">
                       <Upload className="w-8 h-8" />
@@ -191,9 +215,14 @@ export default function Home() {
                   <div className="bg-zinc-50 dark:bg-zinc-800/30 rounded-xl border border-zinc-100 dark:border-zinc-800/50 overflow-hidden flex flex-col">
                     <MinimalColor label={t.browserTheme} value={config.brand} onChange={v => setConfig({ ...config, brand: v })} />
                     <div className="h-px bg-zinc-200/50 dark:bg-zinc-700/50 mx-2 my-1" />
-                    <MinimalColor label={t.iconBg} value={config.bg} onChange={v => setConfig({ ...config, bg: v })} />
+                    <MinimalColor
+                      label={t.iconBg}
+                      value={config.bg}
+                      onChange={v => setConfig({ ...config, bg: v })}
+                      allowTransparent={true} // 开启透明选项
+                    />
                     {/* <div className="h-px bg-zinc-200/20 dark:bg-zinc-700/20" /> */}
-                    <MinimalColor label={t.logoFill} value={config.fg} onChange={v => setConfig({ ...config, fg: v })} />
+                    <MinimalColor label={t.logoFill} value={config.fg} onChange={v => setConfig({ ...config, fg: v })} allowOriginal={true} />
                   </div>
                 </div>
               </div>
