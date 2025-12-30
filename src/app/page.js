@@ -191,7 +191,7 @@ export default function Home() {
                     <code dangerouslySetInnerHTML={{ __html: highlightHtml(resultHtml) }} />
                   </pre>
                 ) : (
-                  <div className="h-full flex flex-col items-center justify-center text-zinc-300 dark:text-zinc-700 select-none opacity-50">
+                  <div className="h-full flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-500 select-none opacity-50">
                     <Terminal className="w-10 h-10 mb-3" />
                     <span className="text-xs font-medium uppercase tracking-widest">{t.waiting}</span>
                     <span className="text-[10px] mt-1">{t.waitingDesc}</span>
