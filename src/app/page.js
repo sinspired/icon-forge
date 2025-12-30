@@ -66,7 +66,7 @@ export default function Home() {
       <div className="w-full max-w-6xl h-auto min-h-screen lg:min-h-0 lg:h-[88vh] bg-white dark:bg-zinc-900 lg:rounded-4xl shadow-none lg:shadow-2xl lg:shadow-zinc-200/50 lg:dark:shadow-black/80 overflow-hidden border-none lg:border border-zinc-100 dark:border-zinc-800 transition-all duration-500 flex flex-col">
 
         {/* Header */}
-        <header className="shrink-0 px-6 lg:px-8 py-5 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 sticky top-0 z-30 lg:static">
+        <header className="shrink-0 px-6 py-3 lg:px-8 lg:py-5 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 sticky top-0 z-30 lg:static">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-zinc-900 dark:bg-white rounded-xl flex items-center justify-center text-white dark:text-zinc-900 font-bold text-sm shadow-lg">IF</div>
             <div>
@@ -86,11 +86,11 @@ export default function Home() {
           <div className="w-full lg:w-[420px] xl:w-[480px] p-8 bg-zinc-50/80 dark:bg-black/20 border-b lg:border-b-0 lg:border-r border-zinc-100 dark:border-zinc-800 flex flex-col relative shrink-0">
             {/* 重置按钮 */}
             {preview && (
-              <button onClick={resetAll} className="absolute top-8 right-8 text-zinc-400 hover:text-red-500 transition-colors" title={t.reset}>
-                <RotateCcw className="w-6 h-6" />
+              <button onClick={resetAll} className="absolute top-4 right-4 lg:top-8 lg:right-8  text-indigo-400 hover:text-red-500 transition-colors" title={t.reset}>
+                <RotateCcw className="w-5 h-5 lg:w-6 lg:h-6" />
               </button>
             )}
-            <div className="flex-1 flex flex-col items-center justify-center gap-4 lg:gap-6 min-h-[350px]">
+            <div className="flex-1 flex flex-col items-center justify-center gap-4 lg:gap-6 min-h-[400px]">
               {/* === 预览图加缩放手柄容器 === */}
               <div className="relative w-full flex items-center justify-center">
 
@@ -180,7 +180,7 @@ export default function Home() {
 
                 {/* 仅在有预览时显示缩放 */}
                 {preview && (
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 z-30 translate-x-2 lg:translate-x-0">
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 z-30">
                     <VerticalSlider
                       label={t.scale || "Scale"}
                       value={config.goldenRatio}
@@ -194,22 +194,22 @@ export default function Home() {
                 {/* 标题或说明 */}
                 {/* <h3 className="text-base font-bold text-zinc-900 dark:text-white">{t.uploadTitle}</h3> */}
                 <p className="text-xs text-zinc-400">{t.uploadDesc}</p>
-
-                {/* === 非 SVG 格式提示 === */}
-                {file && !isSvg && (
-                  <div className="mt-4 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-900/50 rounded-xl flex items-start gap-3 text-left">
-                    <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
-                    <div className="space-y-1">
-                      <p className="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
-                        {t.bitmapDetected}
-                      </p>
-                      <p className="text-[10px] text-amber-600/80 dark:text-amber-500/80 leading-relaxed">
-                        {t.bitmapTip}
-                      </p>
-                    </div>
-                  </div>
-                )}
               </div>
+
+              {/* === 非 SVG 格式提示 === */}
+              {file && !isSvg && (
+                <div className="px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-900/50 rounded-xl flex items-start gap-3 text-left">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
+                  <div className="space-y-1">
+                    <p className="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+                      {t.bitmapDetected}
+                    </p>
+                    <p className="text-[10px] text-amber-600/80 dark:text-amber-500/80 leading-relaxed">
+                      {t.bitmapTip}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="mt-auto lg:pt-6">
