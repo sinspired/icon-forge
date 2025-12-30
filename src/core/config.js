@@ -2,8 +2,8 @@
 
 export const APP_DEFAULTS = {
   // 应用元数据
-  name: "My App",
-  shortName: "App",
+  name: "Icon Forge",
+  shortName: "Forge",
   
   // 颜色配置
   brand: "#ffffff",    // 品牌色 (Azure Blue: #0071e3)
