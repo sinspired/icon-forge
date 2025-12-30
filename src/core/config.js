@@ -18,5 +18,5 @@ export const APP_DEFAULTS = {
   bg: "#ffffff", 
   
   // 生成参数
-  goldenRatio: 0.65,   // Maskable 图标的安全区缩放比例
+  goldenRatio: 1.0,   // Maskable 图标的安全区缩放比例
 };

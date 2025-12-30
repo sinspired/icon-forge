@@ -10,6 +10,8 @@ import CompactInput from "@/components/CompactInput";
 import MinimalColor from "@/components/MinimalColor";
 import { highlightHtml } from "@/lib/utils";
 import { AlertTriangle } from "lucide-react";
+import VerticalSlider from "@/components/VerticalSlider";
+
 
 export default function Home() {
   const [theme, setTheme] = useState('system');
@@ -89,70 +91,103 @@ export default function Home() {
               </button>
             )}
             <div className="flex-1 flex flex-col items-center justify-center gap-4 lg:gap-6 min-h-[350px]">
-              <div className="relative w-full max-w-55 lg:max-w-70 aspect-square group shrink-0">
+              {/* === 预览图加缩放手柄容器 === */}
+              <div className="relative w-full flex items-center justify-center">
 
-                {/* 棋盘格背景 */}
-                <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden opacity-30 border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
-                  style={{
-                    backgroundImage: `linear-gradient(45deg, #a1a1aa 25%, transparent 25%), linear-gradient(-45deg, #a1a1aa 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #a1a1aa 75%), linear-gradient(-45deg, transparent 75%, #a1a1aa 75%)`,
-                    backgroundSize: '40px 40px', backgroundPosition: '0 0, 0 20px, 20px -20px, -20px 0px'
-                  }}
-                />
+                {/* 左侧预览图*/}
+                <div className="relative w-full max-w-55 lg:max-w-70 aspect-square group shrink-0 z-10">
+                  {/* 棋盘格背景 */}
+                  <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden opacity-30 border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
+                    style={{
+                      backgroundImage: `linear-gradient(45deg, #a1a1aa 25%, transparent 25%), linear-gradient(-45deg, #a1a1aa 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #a1a1aa 75%), linear-gradient(-45deg, transparent 75%, #a1a1aa 75%)`,
+                      backgroundSize: '40px 40px', backgroundPosition: '0 0, 0 20px, 20px -20px, -20px 0px'
+                    }}
+                  />
 
-                {/* 背景色层 */}
-                <div className="absolute inset-0 rounded-[2.5rem] shadow-2xl transition-colors duration-300 z-10"
-                  style={bgStyle}
-                />
+                  {/* 背景色层 */}
+                  <div className="absolute inset-0 rounded-[2.5rem] shadow-2xl transition-colors duration-300 z-10"
+                    style={bgStyle}
+                  />
 
-                {/* Mask 图标层 */}
-                {preview ? (
-                  isOriginalColor ? (
-                    // 原色模式 (Original) - 直接显示 img，居中 contain
-                    <div className="absolute inset-0 z-20 p-[20%] flex items-center justify-center pointer-events-none">
-                      <img
-                        src={preview}
-                        alt="Preview"
-                        className="w-full h-full object-contain drop-shadow-sm"
-                      />
-                    </div>
+                  {/* Mask 图标层 */}
+                  {preview ? (
+                    isOriginalColor ? (
+                      // 模式 A: 原色模式
+                      <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none overflow-hidden rounded-[2.5rem]">
+                        <img
+                          src={preview}
+                          alt="Preview"
+                          style={{
+                            width: `${config.goldenRatio * 100}%`,
+                            height: `${config.goldenRatio * 100}%`,
+                            maxWidth: 'none',
+                            maxHeight: 'none',
+                            objectFit: 'contain'
+                          }}
+                          className="drop-shadow-sm transition-all duration-300"
+                        />
+                      </div>
+                    ) : (
+                      // 模式 B: 单色模式
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 overflow-hidden rounded-[2.5rem]">
+                        <div
+                          className="transition-all duration-300"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: config.fg,
+                            maskImage: `url(${preview})`,
+                            maskRepeat: 'no-repeat',
+                            maskPosition: 'center',
+                            maskSize: `${config.goldenRatio * 100}%`,
+                            WebkitMaskImage: `url(${preview})`,
+                            WebkitMaskRepeat: 'no-repeat',
+                            WebkitMaskPosition: 'center',
+                            WebkitMaskSize: `${config.goldenRatio * 100}%`,
+                          }}
+                        />
+                      </div>
+                    )
                   ) : (
-                    // 单色模式 (Tint) - 使用 Mask 遮罩技术着色
-                    <div className="absolute inset-0 transition-colors duration-300 z-20 pointer-events-none"
-                      style={{
-                        backgroundColor: config.fg,
-                        maskImage: `url(${preview})`, maskSize: '60%', maskRepeat: 'no-repeat', maskPosition: 'center',
-                        WebkitMaskImage: `url(${preview})`, WebkitMaskSize: '60%', WebkitMaskRepeat: 'no-repeat', WebkitMaskPosition: 'center'
-                      }}
-                    />
-                  )
-                ) : (
-                  // 空状态
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-20 pointer-events-none text-zinc-400">
-                    <div className="p-4 bg-white/80 dark:bg-black/60 backdrop-blur-xs rounded-2xl flex flex-col items-center gap-2">
-                      <Upload className="w-8 h-8" />
-                      <span className="text-xs font-bold uppercase tracking-widest">{t.clickToUpload}</span>
+                    // 空状态
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 z-20 pointer-events-none text-zinc-400">
+                      <div className="p-4 bg-white/80 dark:bg-black/60 backdrop-blur-xs rounded-2xl flex flex-col items-center gap-2">
+                        <Upload className="w-8 h-8" />
+                        <span className="text-xs font-bold uppercase tracking-widest">{t.clickToUpload}</span>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* 原始 SVG 悬浮窗 */}
+                  {/* 原始 SVG 悬浮窗 */}
+                  {preview && (
+                    <div className="flex flex-col items-center gap-1 absolute -top-10 -left-10 lg:-top-10 lg:-left-10 z-30 transition-all duration-300 opacity-100 translate-y-0 group-hover:opacity-0 group-hover:-translate-y-2 pointer-events-none">
+                      <div className="w-20 h-20 p-2 rounded-2xl border border-zinc-200/50 dark:border-zinc-700/50 shadow-xl flex items-center justify-center bg-white/90 dark:bg-zinc-800/50 backdrop-blur-md overflow-hidden"
+                        style={{
+                          backgroundImage: `linear-gradient(45deg, rgba(161, 161, 170, 0.2) 25%, transparent 25%), linear-gradient(-45deg, rgba(161, 161, 170, 0.2) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(161, 161, 170, 0.2) 75%), linear-gradient(-45deg, transparent 75%, rgba(161, 161, 170, 0.2) 75%)`,
+                          backgroundSize: '20px 20px', backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
+                        }}
+                      >
+                        <img src={preview} alt="Raw" className="w-full h-full object-contain" />
+                      </div>
+                      <span className="text-[10px] text-zinc-500 dark:text-zinc-400 opacity-70 shadow-xl shadow-indigo-500/10">
+                        {t.rawImage}
+                      </span>
+                    </div>
+                  )}
+
+                  <input type="file" accept=".svg, .png, .jpg, .jpeg, .webp" onChange={handleFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-40" />
+                </div>
+
+                {/* 仅在有预览时显示缩放 */}
                 {preview && (
-                  <div className="flex flex-col items-center gap-1 absolute -top-10 -left-10 lg:-top-10 lg:-left-10 z-30 transition-all duration-300 opacity-100 translate-y-0 group-hover:opacity-0 group-hover:-translate-y-2 pointer-events-none">
-                    <div className="w-20 h-20 p-2 rounded-2xl border border-zinc-200/50 dark:border-zinc-700/50 shadow-xl flex items-center justify-center bg-white/90 dark:bg-zinc-800/50 backdrop-blur-md overflow-hidden"
-                      style={{
-                        backgroundImage: `linear-gradient(45deg, rgba(161, 161, 170, 0.2) 25%, transparent 25%), linear-gradient(-45deg, rgba(161, 161, 170, 0.2) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(161, 161, 170, 0.2) 75%), linear-gradient(-45deg, transparent 75%, rgba(161, 161, 170, 0.2) 75%)`,
-                        backgroundSize: '20px 20px', backgroundPosition: '0 0, 0 10px, 10px -10px, -10px 0px'
-                      }}
-                    >
-                      <img src={preview} alt="Raw" className="w-full h-full object-contain" />
-                    </div>
-                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400 opacity-70 shadow-xl shadow-indigo-500/10">
-                      {t.rawImage}
-                    </span>
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 z-30 translate-x-2 lg:translate-x-0">
+                    <VerticalSlider
+                      label={t.scale || "Scale"}
+                      value={config.goldenRatio}
+                      onChange={(v) => setConfig({ ...config, goldenRatio: v })}
+                    />
                   </div>
                 )}
-
-                <input type="file" accept=".svg, .png, .jpg, .jpeg, .webp" onChange={handleFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-40" />
               </div>
 
               <div className="text-center">

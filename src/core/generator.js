@@ -6,9 +6,12 @@ import { APP_DEFAULTS } from "./config.js";
  * 生成所有需要的图标
  */
 export async function generateIcons(inputBuffer, options = {}) {
-  // 1. 获取图片信息
+  // 1. 获取图片元数据
   const metadata = await sharp(inputBuffer).metadata();
   const isSvg = metadata.format === "svg";
+  
+  // 获取原图尺寸
+  const { width: srcWidth, height: srcHeight } = metadata;
 
   // 2. 合并配置
   const cfg = {
@@ -17,11 +20,10 @@ export async function generateIcons(inputBuffer, options = {}) {
     goldenRatio: options.goldenRatio || APP_DEFAULTS.goldenRatio,
   };
 
-  // 3. 解析特殊状态 (全局配置)
+  // 3. 解析特殊状态
   const isGlobalBgTransparent = cfg.background === "transparent" || cfg.background === null;
   const keepOriginalColor = cfg.iconColor === "original" || cfg.iconColor === null;
 
-  // 全局配置的背景色 (用于 App 图标)
   const appBackground = isGlobalBgTransparent
     ? { r: 0, g: 0, b: 0, alpha: 0 }
     : cfg.background;
@@ -29,70 +31,65 @@ export async function generateIcons(inputBuffer, options = {}) {
   const files = {};
 
   // === 通用处理核心函数 ===
-  // 参数 options: { isMaskable: boolean, forceTransparent: boolean }
   const processImage = async (targetSize, { isMaskable = false, forceTransparent = false } = {}) => {
-
-    // 决定当前图标的背景色
+    
+    // A. 确定背景
     const currentBackground = forceTransparent
       ? { r: 0, g: 0, b: 0, alpha: 0 }
       : appBackground;
 
-    // ------------------------------------------------
-    // 策略 A: JPG/PNG 位图
-    // ------------------------------------------------
-    if (!isSvg) {
-      // 如果是 JPG 且强制透明：我们无法让 JPG 变透明，但我们确保不去"添加"额外背景
-      // 如果不是强制透明 (如 Apple Icon)：我们使用 cover 填充整个背景区域
-      const fitMode = forceTransparent ? 'contain' : 'cover';
+    // B. 计算缩放逻辑
+    // 目标：以短边铺满为 100% (Scale=1.0 时效果等同于 cover)
+    const userScale = isMaskable ? (cfg.goldenRatio * 0.8) : cfg.goldenRatio;
+    const longEdge = Math.max(srcWidth, srcHeight);
+    
+    // 基准比例：让长边等于目标尺寸
+    const baseRatio = targetSize / longEdge;
+    // 最终比例：应用用户的缩放
+    const finalRatio = baseRatio * userScale;
 
-      return await sharp(inputBuffer)
-        .resize({
-          width: targetSize,
-          height: targetSize,
-          fit: fitMode,
-          background: currentBackground
-        })
-        .png()
-        .toBuffer();
-    }
+    const resizeWidth = Math.round(srcWidth * finalRatio);
+    const resizeHeight = Math.round(srcHeight * finalRatio);
 
-    // ------------------------------------------------
-    // 策略 B: SVG 矢量图
-    // ------------------------------------------------
-
-    // 1. 计算内容尺寸
-    let iconSize;
-    if (forceTransparent) {
-      // Web 图标：通常希望图标撑得比较满，不需要像 Maskable 那样留很大的安全区
-      iconSize = targetSize;
-    } else {
-      // App 图标：需要安全区 (黄金比例 或 0.8)
-      iconSize = isMaskable
-        ? Math.round(targetSize * cfg.goldenRatio)
-        : Math.round(targetSize * 0.8);
-    }
-
-    // 2. 处理前景
+    // C. 处理前景图 (Resize)
     let fgChain = sharp(inputBuffer).resize({
-      width: iconSize,
-      height: iconSize,
-      fit: 'inside', // 保持比例
-      background: { r: 0, g: 0, b: 0, alpha: 0 }
+      width: resizeWidth,
+      height: resizeHeight,
+      fit: 'fill', // 强制缩放到计算好的尺寸
     });
 
-    if (!keepOriginalColor) {
+    // 仅 SVG 允许改色
+    if (isSvg && !keepOriginalColor) {
       fgChain = fgChain.tint(cfg.iconColor);
+    }
+
+    // 手动裁剪 (Manual Crop)
+    // 如果缩放后的图比底板大，必须裁剪掉多余部分，否则 composite 会报错
+    if (resizeWidth > targetSize || resizeHeight > targetSize) {
+        const extractWidth = Math.min(resizeWidth, targetSize);
+        const extractHeight = Math.min(resizeHeight, targetSize);
+        
+        const left = Math.floor((resizeWidth - extractWidth) / 2);
+        const top = Math.floor((resizeHeight - extractHeight) / 2);
+
+        fgChain = fgChain.extract({
+            left: left,
+            top: top,
+            width: extractWidth,
+            height: extractHeight
+        });
     }
 
     const fg = await fgChain.png().toBuffer();
 
-    // 3. 创建底板并合成
+    // D. 合成 (Composite)
+    // 此时 fg 的尺寸一定 <= targetSize，可以安全合成
     return await sharp({
       create: {
         width: targetSize,
         height: targetSize,
         channels: 4,
-        background: currentBackground, // 使用根据用途决定的背景
+        background: currentBackground,
       },
     })
       .composite([{ input: fg, gravity: 'center' }])
@@ -100,31 +97,34 @@ export async function generateIcons(inputBuffer, options = {}) {
       .toBuffer();
   };
 
-  // === 1. Web 标准图标 (强制透明) ===
-  // 这些图标用于 favicon 或 <link rel="icon">
-  // 它们不应该带有实体背景色，除非 SVG 本身就是方的且带背景
-  const ico16 = await processImage(16, { forceTransparent: true });
-  const ico32 = await processImage(32, { forceTransparent: true });
-  files["favicon.ico"] = await pngToIco([ico16, ico32]);
+  // === 1. Favicon 处理 (仅限 SVG) ===
+  // 严格执行：非 SVG 格式，不生成 .ico 和 .svg
+  if (isSvg) {
+    const ico16 = await processImage(16, { forceTransparent: true });
+    const ico32 = await processImage(32, { forceTransparent: true });
+    
+    files["favicon.ico"] = await pngToIco([ico16, ico32]);
+    files["favicon.svg"] = inputBuffer; // 原样保存
+  }
 
-  // 生成通用的 icon-xx.png (用于 Manifest 'any' 和 Web)
-  const webSizes = [16, 32, 192, 512];
+  // === 2. Web 通用 PNG 图标 (始终生成) ===
+  const webSizes = [32, 192, 512];
   for (const size of webSizes) {
     files[`icon-${size}.png`] = await processImage(size, { forceTransparent: true });
   }
 
-  // === 2. 移动端/App 图标 (使用配置背景) ===
-
-  // iOS: 必须非透明 (否则变黑)
+  // === 3. 移动端/App 图标 ===
+  
+  // iOS (实色)
   files["apple-touch-icon.png"] = await processImage(180, { isMaskable: false, forceTransparent: false });
 
-  // Android Maskable: 必须非透明 (且有安全区缩放)
+  // Android Maskable (实色)
   files["maskable-192.png"] = await processImage(192, { isMaskable: true, forceTransparent: false });
   files["maskable-512.png"] = await processImage(512, { isMaskable: true, forceTransparent: false });
 
-  // 用于开屏时的logo，需要透明背景
-  files["android-192.png"] = await processImage(192, { isMaskable: false, forceTransparent: false });
-  files["android-512.png"] = await processImage(512, { isMaskable: false, forceTransparent: false });
+  // Android Launch (透明)
+  files["android-192.png"] = await processImage(192, { isMaskable: false, forceTransparent: true });
+  files["android-512.png"] = await processImage(512, { isMaskable: false, forceTransparent: true });
 
   return files;
 }
