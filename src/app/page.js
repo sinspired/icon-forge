@@ -57,11 +57,6 @@ export default function Home() {
             </div>
           </div>
           <div className="flex items-center gap-1 lg:gap-3">
-            {preview && (
-              <button onClick={resetAll} className="p-2 text-zinc-400 hover:text-red-500 transition-colors" title={t.reset}>
-                <RotateCcw className="w-4 h-4" />
-              </button>
-            )}
             <LangToggle lang={lang} setLang={setLang} />
             <ThemeToggle theme={theme} setTheme={setTheme} />
           </div>
@@ -71,6 +66,12 @@ export default function Home() {
 
           {/* 左侧：视觉预览 */}
           <div className="w-full lg:w-[420px] xl:w-[480px] p-8 bg-zinc-50/80 dark:bg-black/20 border-b lg:border-b-0 lg:border-r border-zinc-100 dark:border-zinc-800 flex flex-col relative shrink-0">
+            {/* 重置按钮 */}
+            {preview && (
+              <button onClick={resetAll} className="absolute top-8 right-8 text-zinc-400 hover:text-red-500 transition-colors" title={t.reset}>
+                <RotateCcw className="w-6 h-6" />
+              </button>
+            )}
             <div className="flex-1 flex flex-col items-center justify-center gap-8 min-h-[350px]">
               <div className="relative w-full max-w-[320px] aspect-square group shrink-0">
 
@@ -141,8 +142,21 @@ export default function Home() {
 
           {/* 右侧：配置与代码 */}
           <div className="flex-1 flex flex-col h-auto lg:h-full bg-white dark:bg-zinc-900 min-w-0">
-            <div className={`transition-all duration-500 shrink-0 h-auto border-b border-zinc-100 dark:border-zinc-800 ${resultHtml ? 'p-6 bg-zinc-50/50 dark:bg-black/20' : 'p-8 bg-white dark:bg-zinc-900'}`}>
-              <div className={`grid gap-6 transition-all duration-500 ${resultHtml ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1 max-w-xl mx-auto lg:pt-10'}`}>
+
+            {/* 配置组 */}
+            <div
+              className={
+                `transition-all duration-500 shrink-0 h-auto border-b border-zinc-100 dark:border-zinc-800
+                ${resultHtml
+                  ? 'p-6 bg-zinc-50/50 dark:bg-black/20' : 'p-8 bg-white dark:bg-zinc-900'
+                }`
+              }
+            >
+
+              <div className={`grid gap-6 transition-all duration-500 
+                ${resultHtml ? 'grid-cols-1 lg:grid-cols-3' : 'grid-cols-1 max-w-xxl mx-auto'}`
+              }
+              >
 
                 {/* Meta Group */}
                 <div className="space-y-4 min-w-0">
@@ -155,9 +169,9 @@ export default function Home() {
                     <CompactInput label={t.shortName} value={config.shortName} onChange={v => setConfig({ ...config, shortName: v })} placeholder="App" />
                   </div>
                 </div>
-
+                {!resultHtml && <div className="hidden lg:block flex-1 h-auto" />}
                 {/* Style Group */}
-                <div className="space-y-4 min-w-0">
+                <div className="space-y-4 min-w-0 col-span-2">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="w-1 h-4 bg-rose-500 rounded-full"></span>
                     <h3 className="text-xs font-bold text-zinc-900 dark:text-white uppercase">{t.styleConfig}</h3>
@@ -205,6 +219,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+
         </div>
       </div>
 
