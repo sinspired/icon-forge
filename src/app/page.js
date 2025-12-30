@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Upload, Download, Loader2, Copy, Check, Terminal, Sun, Moon, Monitor, RotateCcw, Languages } from "lucide-react";
 import { APP_DEFAULTS } from "@/core/config";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const TRANSLATIONS = {
   zh: {
@@ -90,31 +91,6 @@ const ScrollbarStyles = () => (
     }
   `}</style>
 );
-
-const ThemeToggle = ({ theme, setTheme }) => {
-  const modes = [
-    { id: 'light', icon: Sun },
-    { id: 'system', icon: Monitor },
-    { id: 'dark', icon: Moon },
-  ];
-
-  return (
-    <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-full border border-zinc-200 dark:border-zinc-700">
-      {modes.map((mode) => (
-        <button
-          key={mode.id}
-          onClick={() => setTheme(mode.id)}
-          className={`w-7 h-7 flex items-center justify-center rounded-full transition-all duration-200 ${theme === mode.id
-            ? 'bg-white dark:bg-zinc-600 text-indigo-600 dark:text-indigo-400 shadow-xs'
-            : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300'
-            }`}
-        >
-          <mode.icon className="w-3.5 h-3.5" strokeWidth={2} />
-        </button>
-      ))}
-    </div>
-  );
-};
 
 const LangToggle = ({ lang, setLang }) => (
   <button
