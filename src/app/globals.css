@@ -1,0 +1,8 @@
+/* src/app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply transition-colors duration-300 ease-in-out;
+}
