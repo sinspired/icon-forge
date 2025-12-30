@@ -56,7 +56,7 @@ export default function Home() {
               <p className="text-[10px] text-zinc-400 mt-0.5 font-medium tracking-wide uppercase">{t.subtitle}</p>
             </div>
           </div>
-          <div className="flex items-center gap-1 lg:gap-3">
+          <div className="flex items-center gap-4 lg:gap-5">
             <LangToggle lang={lang} setLang={setLang} />
             <ThemeToggle theme={theme} setTheme={setTheme} />
           </div>
