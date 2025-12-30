@@ -9,7 +9,7 @@ import { useIconForge } from "@/hooks/useIconForge";
 import CompactInput from "@/components/CompactInput";
 import MinimalColor from "@/components/MinimalColor";
 import { highlightHtml } from "@/lib/utils";
-import BooleanToggle from "@/components/BooleanToggle";
+import { AlertTriangle } from "lucide-react";
 
 export default function Home() {
   const [theme, setTheme] = useState('system');
@@ -20,7 +20,7 @@ export default function Home() {
   const [enabled, setEnabled] = useState(false);
 
   const {
-    file, preview, loading, resultHtml, config,
+    file, preview, loading, resultHtml, config, isSvg,
     setConfig, handleFileChange, handleSubmit, resetAll
   } = useIconForge(t);
 
@@ -29,7 +29,7 @@ export default function Home() {
   // 2. 如果用户配置为透明 -> 强制透明
   // 3. 否则 -> 显示配置的颜色
   const bgStyle = (!preview || config.bg === 'transparent')
-    ? { backgroundColor: 'transparent' } 
+    ? { backgroundColor: 'transparent' }
     : { backgroundColor: config.bg };
 
   // 图标处理
@@ -152,12 +152,28 @@ export default function Home() {
                   </div>
                 )}
 
-                <input type="file" accept=".svg" onChange={handleFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-40" />
+                <input type="file" accept=".svg, .png, .jpg, .jpeg, .webp" onChange={handleFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-40" />
               </div>
 
               <div className="text-center">
+                {/* 标题或说明 */}
                 {/* <h3 className="text-base font-bold text-zinc-900 dark:text-white">{t.uploadTitle}</h3> */}
                 <p className="text-xs text-zinc-400">{t.uploadDesc}</p>
+
+                {/* === 非 SVG 格式提示 === */}
+                {file && !isSvg && (
+                  <div className="mt-4 px-4 py-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-900/50 rounded-xl flex items-start gap-3 text-left">
+                    <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-500 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="text-[11px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+                        {t.bitmapDetected}
+                      </p>
+                      <p className="text-[10px] text-amber-600/80 dark:text-amber-500/80 leading-relaxed">
+                        {t.bitmapTip}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -199,16 +215,9 @@ export default function Home() {
 
                 {/* Style Group - 占据 7/12 宽度 */}
                 <div className={`space-y-4 min-w-0 ${resultHtml ? 'lg:col-span-7' : ''}`}>
-                  <div className="flex justify-between">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="w-1 h-4 bg-rose-500 rounded-full"></span>
-                      <h3 className="text-xs font-bold text-zinc-900 dark:text-white uppercase">{t.styleConfig}</h3>
-                    </div>
-                    {/* <BooleanToggle
-                      label="按钮"
-                      value={enabled}
-                      onChange={setEnabled}
-                    /> */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-1 h-4 bg-rose-500 rounded-full"></span>
+                    <h3 className="text-xs font-bold text-zinc-900 dark:text-white uppercase">{t.styleConfig}</h3>
                   </div>
 
                   {/* 移除 p-2，改用 overflow-hidden 确保内部组件 hover 背景能填满圆角 */}
@@ -222,7 +231,18 @@ export default function Home() {
                       allowTransparent={true} // 开启透明选项
                     />
                     {/* <div className="h-px bg-zinc-200/20 dark:bg-zinc-700/20" /> */}
-                    <MinimalColor label={t.logoFill} value={config.fg} onChange={v => setConfig({ ...config, fg: v })} allowOriginal={true} />
+                    <MinimalColor label={t.logoFill} value={config.fg} onChange={v => setConfig({ ...config, fg: v })} allowOriginal={true}
+                      // 如果不是 SVG，强制禁用
+                      disabled={!!file && !isSvg}
+                    />
+                    {/* 解释为什么被禁用了 */}
+                    {file && !isSvg && (
+                      <div className="px-3 pb-2 -mt-1">
+                        <p className="text-[10px] text-zinc-400">
+                          {t.colorTintDisabledTip}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

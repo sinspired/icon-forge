@@ -4,6 +4,7 @@ import { APP_DEFAULTS } from "@/core/config";
 export function useIconForge(t) {
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
+    const [isSvg, setIsSvg] = useState(true);
     const [loading, setLoading] = useState(false);
     const [resultHtml, setResultHtml] = useState(null);
     const [config, setConfig] = useState({
@@ -20,6 +21,20 @@ export function useIconForge(t) {
             setFile(selected);
             setPreview(URL.createObjectURL(selected));
             setResultHtml(null);
+
+            // 简单检测文件类型
+            // 某些系统下 SVG 的 type 可能是空字符串，所以加上扩展名检测作为兜底
+            const isSvgType =
+                selected.type.includes('svg') ||
+                selected.name.toLowerCase().endsWith('.svg');
+
+            setIsSvg(isSvgType);
+
+            // 如果是位图，自动将图标颜色模式设为 'original' (原色)
+            // 这样用户就不会困惑为什么改颜色没反应
+            if (!isSvgType) {
+                setConfig(prev => ({ ...prev, fg: 'original' }));
+            }
         }
     };
 
@@ -86,7 +101,7 @@ export function useIconForge(t) {
     };
 
     return {
-        file, preview, loading, resultHtml, config,
+        file, preview, loading, resultHtml, config, isSvg,
         setConfig, handleFileChange, handleSubmit, resetAll
     };
 }
