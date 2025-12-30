@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --transition-property-colors:
-    background-color, border-color, color, fill, stroke;
+  --transition-property-colors: background-color, border-color, color, fill,
+    stroke;
 }
 
 /*
@@ -28,4 +28,39 @@
 
 body {
   @apply transition-colors duration-300 ease-in-out;
+}
+
+@layer utilities {
+  /* 滚动条整体 */
+  .custom-scrollbar::-webkit-scrollbar {
+    @apply w-2.5 h-2.5;
+  }
+
+  /* 轨道 */
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  /* 滑块 (Light Mode) */
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded-full border-2 border-transparent bg-clip-content bg-zinc-300;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-400;
+  }
+
+  /* 滑块 (Dark Mode) */
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-zinc-700;
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-600;
+  }
+
+  /* 角落 */
+  .custom-scrollbar::-webkit-scrollbar-corner {
+    @apply bg-transparent;
+  }
 }
