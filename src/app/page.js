@@ -9,12 +9,15 @@ import { useIconForge } from "@/hooks/useIconForge";
 import CompactInput from "@/components/CompactInput";
 import MinimalColor from "@/components/MinimalColor";
 import { highlightHtml } from "@/lib/utils";
+import BooleanToggle from "@/components/BooleanToggle";
 
 export default function Home() {
   const [theme, setTheme] = useState('system');
   const [lang, setLang] = useState('zh');
   const [copied, setCopied] = useState(false);
   const t = TRANSLATIONS[lang];
+
+  const [enabled, setEnabled] = useState(false);
 
   const {
     file, preview, loading, resultHtml, config,
@@ -74,8 +77,8 @@ export default function Home() {
                 <RotateCcw className="w-6 h-6" />
               </button>
             )}
-            <div className="flex-1 flex flex-col items-center justify-center gap-8 min-h-[350px]">
-              <div className="relative w-full max-w-[320px] aspect-square group shrink-0">
+            <div className="flex-1 flex flex-col items-center justify-center gap-4 lg:gap-6 min-h-[350px]">
+              <div className="relative w-full max-w-55 lg:max-w-70 aspect-square group shrink-0">
 
                 {/* 棋盘格背景 */}
                 <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden opacity-30 border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
@@ -110,7 +113,7 @@ export default function Home() {
 
                 {/* 原始 SVG 悬浮窗 */}
                 {preview && (
-                  <div className="absolute -top-6 -left-6 z-30 transition-all duration-300 opacity-100 translate-y-0 group-hover:opacity-0 group-hover:-translate-y-2 pointer-events-none">
+                  <div className="flex flex-col items-center gap-1 absolute -top-10 -left-10 lg:-top-10 lg:-left-10 z-30 transition-all duration-300 opacity-100 translate-y-0 group-hover:opacity-0 group-hover:-translate-y-2 pointer-events-none">
                     <div className="w-20 h-20 p-2 rounded-2xl border border-zinc-200/50 dark:border-zinc-700/50 shadow-xl flex items-center justify-center bg-white/90 dark:bg-zinc-800/50 backdrop-blur-md overflow-hidden"
                       style={{
                         backgroundImage: `linear-gradient(45deg, rgba(161, 161, 170, 0.2) 25%, transparent 25%), linear-gradient(-45deg, rgba(161, 161, 170, 0.2) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(161, 161, 170, 0.2) 75%), linear-gradient(-45deg, transparent 75%, rgba(161, 161, 170, 0.2) 75%)`,
@@ -119,6 +122,9 @@ export default function Home() {
                     >
                       <img src={preview} alt="Raw" className="w-full h-full object-contain" />
                     </div>
+                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400 opacity-70 shadow-xl shadow-indigo-500/10">
+                      {t.rawImage}
+                    </span>
                   </div>
                 )}
 
@@ -126,12 +132,12 @@ export default function Home() {
               </div>
 
               <div className="text-center">
-                <h3 className="text-base font-bold text-zinc-900 dark:text-white">{t.uploadTitle}</h3>
-                <p className="text-xs text-zinc-400 mt-1">{t.uploadDesc}</p>
+                {/* <h3 className="text-base font-bold text-zinc-900 dark:text-white">{t.uploadTitle}</h3> */}
+                <p className="text-xs text-zinc-400">{t.uploadDesc}</p>
               </div>
             </div>
 
-            <div className="mt-auto pt-6">
+            <div className="mt-auto lg:pt-6">
               <button onClick={handleSubmit} disabled={!file || loading}
                 className={`w-full py-4 rounded-xl font-bold text-sm text-white shadow-xl shadow-indigo-500/10 transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${!file ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed shadow-none' : loading ? 'bg-zinc-900 dark:bg-indigo-600 cursor-wait' : 'bg-zinc-900 hover:bg-black dark:bg-indigo-600 dark:hover:bg-indigo-500'
                   }`}
@@ -169,17 +175,24 @@ export default function Home() {
 
                 {/* Style Group - 占据 7/12 宽度 */}
                 <div className={`space-y-4 min-w-0 ${resultHtml ? 'lg:col-span-7' : ''}`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="w-1 h-4 bg-rose-500 rounded-full"></span>
-                    <h3 className="text-xs font-bold text-zinc-900 dark:text-white uppercase">{t.styleConfig}</h3>
+                  <div className="flex justify-between">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="w-1 h-4 bg-rose-500 rounded-full"></span>
+                      <h3 className="text-xs font-bold text-zinc-900 dark:text-white uppercase">{t.styleConfig}</h3>
+                    </div>
+                    {/* <BooleanToggle
+                      label="按钮"
+                      value={enabled}
+                      onChange={setEnabled}
+                    /> */}
                   </div>
 
                   {/* 移除 p-2，改用 overflow-hidden 确保内部组件 hover 背景能填满圆角 */}
                   <div className="bg-zinc-50 dark:bg-zinc-800/30 rounded-xl border border-zinc-100 dark:border-zinc-800/50 overflow-hidden flex flex-col">
                     <MinimalColor label={t.browserTheme} value={config.brand} onChange={v => setConfig({ ...config, brand: v })} />
-                    <div className="h-px bg-zinc-200/50 dark:bg-zinc-700/50" /> {/* 改用全宽分隔线 */}
+                    <div className="h-px bg-zinc-200/50 dark:bg-zinc-700/50 mx-2 my-1" />
                     <MinimalColor label={t.iconBg} value={config.bg} onChange={v => setConfig({ ...config, bg: v })} />
-                    <div className="h-px bg-zinc-200/50 dark:bg-zinc-700/50" />
+                    {/* <div className="h-px bg-zinc-200/20 dark:bg-zinc-700/20" /> */}
                     <MinimalColor label={t.logoFill} value={config.fg} onChange={v => setConfig({ ...config, fg: v })} />
                   </div>
                 </div>

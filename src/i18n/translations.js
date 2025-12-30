@@ -2,8 +2,10 @@ export const TRANSLATIONS = {
   zh: {
     title: "Icon Forge",
     subtitle: "PWA 图标生成器",
+    clickToUpload: "点击上传",
     uploadTitle: "点击上传 SVG",
     uploadDesc: "实时渲染预览",
+    rawImage: "原始图像",
     reset: "重置",
     appInfo: "应用信息",
     fullName: "应用全名",
@@ -26,8 +28,10 @@ export const TRANSLATIONS = {
   en: {
     title: "Icon Forge",
     subtitle: "PWA Asset Generator",
+    clickToUpload: "Upload",
     uploadTitle: "Click to Upload",
     uploadDesc: "Real-time Preview",
+    rawImage: "Raw Image",
     reset: "Reset",
     appInfo: "App Meta",
     fullName: "Full Name",
