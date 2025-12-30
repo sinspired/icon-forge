@@ -6,7 +6,9 @@ import ThemeToggle from "@/components/ThemeToggle";
 import LangToggle from "@/components/LangToggle";
 import { TRANSLATIONS } from "@/i18n/translations";
 import { useIconForge } from "@/hooks/useIconForge";
-import { toInputColor, highlightHtml } from "@/lib/utils";
+import CompactInput from "@/components/CompactInput";
+import MinimalColor from "@/components/MinimalColor";
+import { highlightHtml } from "@/lib/utils";
 
 export default function Home() {
   const [theme, setTheme] = useState('system');
@@ -145,41 +147,39 @@ export default function Home() {
 
             {/* 配置组 */}
             <div
-              className={
-                `transition-all duration-500 shrink-0 h-auto border-b border-zinc-100 dark:border-zinc-800
-                ${resultHtml
-                  ? 'p-6 bg-zinc-50/50 dark:bg-black/20' : 'p-8 bg-white dark:bg-zinc-900'
-                }`
+              className={`transition-all duration-500 shrink-0 h-auto border-b border-zinc-100 dark:border-zinc-800
+                ${resultHtml ? 'p-6 bg-zinc-50/50 dark:bg-black/20' : 'p-8 bg-white dark:bg-zinc-900'}`
               }
             >
-
-              <div className={`grid gap-6 transition-all duration-500 
-                ${resultHtml ? 'grid-cols-1 lg:grid-cols-3' : 'grid-cols-1 max-w-xxl mx-auto'}`
-              }
+              <div className={`grid gap-8 transition-all duration-500 
+                ${resultHtml ? 'grid-cols-1 lg:grid-cols-12' : 'grid-cols-1 max-w-2xl mx-auto'}`}
               >
-
-                {/* Meta Group */}
-                <div className="space-y-4 min-w-0">
+                {/* Meta Group - 占据 5/12 宽度 */}
+                <div className={`space-y-4 min-w-0 ${resultHtml ? 'lg:col-span-5' : ''}`}>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="w-1 h-4 bg-indigo-500 rounded-full"></span>
                     <h3 className="text-xs font-bold text-zinc-900 dark:text-white uppercase">{t.appInfo}</h3>
                   </div>
-                  <div className="space-y-3">
+                  {/* 使用相同的容器感，确保左右对齐 */}
+                  <div className="flex flex-col gap-3">
                     <CompactInput label={t.fullName} value={config.name} onChange={v => setConfig({ ...config, name: v })} placeholder="My App" />
                     <CompactInput label={t.shortName} value={config.shortName} onChange={v => setConfig({ ...config, shortName: v })} placeholder="App" />
                   </div>
                 </div>
-                {!resultHtml && <div className="hidden lg:block flex-1 h-auto" />}
-                {/* Style Group */}
-                <div className="space-y-4 min-w-0 col-span-2">
+
+                {/* Style Group - 占据 7/12 宽度 */}
+                <div className={`space-y-4 min-w-0 ${resultHtml ? 'lg:col-span-7' : ''}`}>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="w-1 h-4 bg-rose-500 rounded-full"></span>
                     <h3 className="text-xs font-bold text-zinc-900 dark:text-white uppercase">{t.styleConfig}</h3>
                   </div>
-                  <div className="bg-zinc-50 dark:bg-zinc-800/30 rounded-xl border border-zinc-100 dark:border-zinc-800/50 p-2 space-y-1">
+
+                  {/* 移除 p-2，改用 overflow-hidden 确保内部组件 hover 背景能填满圆角 */}
+                  <div className="bg-zinc-50 dark:bg-zinc-800/30 rounded-xl border border-zinc-100 dark:border-zinc-800/50 overflow-hidden flex flex-col">
                     <MinimalColor label={t.browserTheme} value={config.brand} onChange={v => setConfig({ ...config, brand: v })} />
-                    <div className="h-px bg-zinc-200/50 dark:bg-zinc-700/50 mx-2 my-1"></div>
+                    <div className="h-px bg-zinc-200/50 dark:bg-zinc-700/50" /> {/* 改用全宽分隔线 */}
                     <MinimalColor label={t.iconBg} value={config.bg} onChange={v => setConfig({ ...config, bg: v })} />
+                    <div className="h-px bg-zinc-200/50 dark:bg-zinc-700/50" />
                     <MinimalColor label={t.logoFill} value={config.fg} onChange={v => setConfig({ ...config, fg: v })} />
                   </div>
                 </div>
@@ -234,23 +234,3 @@ export default function Home() {
     </div>
   );
 }
-
-// 内部复用组件
-const CompactInput = ({ label, value, onChange, placeholder }) => (
-  <div className="group relative w-full">
-    <input type="text" value={value} onChange={e => onChange(e.target.value)} className="peer w-full pl-2 pr-2 pt-5 pb-2 text-sm bg-zinc-50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700 rounded-t-lg focus:bg-zinc-100 dark:focus:bg-zinc-800 focus:border-indigo-500 outline-none transition-all placeholder-transparent text-zinc-800 dark:text-zinc-200" placeholder={placeholder} />
-    <label className="absolute left-2 top-1.5 text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-xs peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-indigo-500">{label}</label>
-  </div>
-);
-
-const MinimalColor = ({ label, value, onChange }) => (
-  <div className="flex items-center justify-between p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors group">
-    <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">{label}</span>
-    <div className="flex items-center gap-3">
-      <span className="text-[10px] font-mono text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity uppercase">{value}</span>
-      <div className="relative w-7 h-7 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-600 shrink-0 ring-1 ring-black/5 dark:ring-white/5 cursor-pointer hover:scale-110 transition-transform">
-        <input type="color" value={toInputColor(value)} onChange={e => onChange(e.target.value)} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] p-0 border-0 m-0 cursor-pointer appearance-none bg-transparent" />
-      </div>
-    </div>
-  </div>
-);
