@@ -83,7 +83,7 @@ export default function Home() {
         <div className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden">
 
           {/* 左侧：视觉预览 */}
-          <div className="w-full lg:w-[420px] xl:w-[480px] p-8 bg-zinc-50/80 dark:bg-black/20 border-b lg:border-b-0 lg:border-r border-zinc-100 dark:border-zinc-800 flex flex-col relative shrink-0">
+          <div className="w-full lg:w-115 xl:w-140 p-8 bg-zinc-50/80 dark:bg-black/20 border-b lg:border-b-0 lg:border-r border-zinc-100 dark:border-zinc-800 flex flex-col relative shrink-0">
             {/* 重置按钮 */}
             {preview && (
               <button onClick={resetAll} className="absolute top-4 right-4 lg:top-8 lg:right-8  text-indigo-400 hover:text-red-500 transition-colors" title={t.reset}>
@@ -95,7 +95,7 @@ export default function Home() {
               <div className="relative w-full flex items-center justify-center">
 
                 {/* 左侧预览图*/}
-                <div className="relative w-full max-w-55 lg:max-w-70 aspect-square group shrink-0 z-10">
+                <div className="relative w-full max-w-50 lg:max-w-70 xl:max-w-88 aspect-square group shrink-0 z-10">
                   {/* 棋盘格背景 */}
                   <div className="absolute inset-0 rounded-[2.5rem] overflow-hidden opacity-30 border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800"
                     style={{
@@ -180,7 +180,7 @@ export default function Home() {
 
                 {/* 仅在有预览时显示缩放 */}
                 {preview && (
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 z-30">
+                  <div className="absolute right-1 lg:right-2 top-1/2 -translate-y-1/2 z-20">
                     <VerticalSlider
                       label={t.scale || "Scale"}
                       value={config.goldenRatio}
