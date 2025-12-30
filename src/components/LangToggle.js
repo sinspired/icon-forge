@@ -5,7 +5,7 @@ export default function LangToggle({ lang, setLang }) {
   return (
     <button
       onClick={() => setLang(l => (l === "zh" ? "en" : "zh"))}
-      className="relative group flex items-center px-2 py-1.5 rounded-full 
+      className="relative group flex items-center px-1.5 py-1.5 rounded-full 
                  bg-zinc-100 dark:bg-zinc-800 
                  border border-zinc-200 dark:border-zinc-700 
                  hover:bg-zinc-200 dark:hover:bg-zinc-700 
