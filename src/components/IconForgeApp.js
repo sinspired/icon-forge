@@ -11,7 +11,7 @@ import MinimalColor from "@/components/MinimalColor";
 import { highlightHtml } from "@/lib/utils";
 import VerticalSlider from "@/components/VerticalSlider";
 import CopyButton from "@/components/CopyButton";
-
+import BrandLogo from "@/components/BrandLogo";
 
 export default function IconForgeApp() {
   const [theme, setTheme] = useState('system');
@@ -58,7 +58,9 @@ export default function IconForgeApp() {
         {/* Header */}
         <header className="shrink-0 px-6 py-3 lg:px-8 lg:py-5 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 sticky top-0 z-30 lg:static">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-zinc-900 dark:bg-white rounded-xl flex items-center justify-center text-white dark:text-zinc-900 font-bold text-sm shadow-lg">IF</div>
+            <div className="w-8 h-8 bg-zinc-900 dark:bg-white rounded-lg flex items-center justify-center text-white dark:text-zinc-900 font-bold text-sm shadow-lg">
+              <BrandLogo className="w-4 h-4" />
+            </div>
             <div>
               <h1 className="font-bold text-base leading-none tracking-tight">{t.title}</h1>
               <p className="text-[10px] text-zinc-400 mt-0.5 font-medium tracking-wide uppercase">{t.subtitle}</p>
@@ -281,7 +283,7 @@ export default function IconForgeApp() {
                 </div>
                 {resultHtml && (
                   <div>
-                  <CopyButton text={resultHtml} />
+                    <CopyButton text={resultHtml} />
                   </div>
                 )}
               </div>
