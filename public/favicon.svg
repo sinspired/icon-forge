@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="uuid-06fa2abd-afcb-4c32-809c-fcbc7a1708b4" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 446.89 414">
+  <defs>
+    <linearGradient id="uuid-ca516c1c-548c-415d-a034-9f4f1e9fffea" data-name="未命名的渐变 140" x1="315.64" y1="17.74" x2="318.27" y2="410.66" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#855cff"/>
+      <stop offset="1" stop-color="#510dff"/>
+    </linearGradient>
+    <linearGradient id="uuid-d8781f4d-5351-4b78-8da6-72285d8fab6c" data-name="未命名的渐变 149" x1="0" y1="48.58" x2="124.72" y2="48.58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#510dff"/>
+      <stop offset="1" stop-color="#8359ff"/>
+    </linearGradient>
+    <linearGradient id="uuid-0140db0e-6ccc-467e-81a8-4242f891e57f" data-name="未命名的渐变 149" y1="206.29" y2="206.29" xlink:href="#uuid-d8781f4d-5351-4b78-8da6-72285d8fab6c"/>
+    <linearGradient id="uuid-ed10e24e-2088-40f1-b875-6ca4bac4f91d" data-name="未命名的渐变 149" y1="365.38" y2="365.38" xlink:href="#uuid-d8781f4d-5351-4b78-8da6-72285d8fab6c"/>
+  </defs>
+  <path d="M311.85,97.58v74.49l135.04-.38v98.49l-135.04-.52v144.35h-124.72V0h259.54v97.58h-134.82Z" style="fill: url(#uuid-ca516c1c-548c-415d-a034-9f4f1e9fffea);"/>
+  <g>
+    <rect width="124.72" height="97.16" style="fill: url(#uuid-d8781f4d-5351-4b78-8da6-72285d8fab6c);"/>
+    <rect y="158.38" width="124.72" height="95.82" style="fill: url(#uuid-0140db0e-6ccc-467e-81a8-4242f891e57f);"/>
+    <rect y="316.75" width="124.72" height="97.25" style="fill: url(#uuid-ed10e24e-2088-40f1-b875-6ca4bac4f91d);"/>
+  </g>
+</svg>
