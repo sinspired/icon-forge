@@ -50,17 +50,17 @@ export const metadata = {
   openGraph: {
     title: "Icon Forge - PWA 图标生成器",
     description: "为您的 PWA 和 Web 应用一键生成生产级图标。",
-    url: "https://icon-forge-two.vercel.app", // 网站实际部署地址
+    url: "https://icon-forge.linkpc.dpdns.org", // 网站实际部署地址
     siteName: "Icon Forge",
     images: [
       {
-        url: 'https://icon-forge-two.vercel.app/Icon-Forge_OG.png', 
+        url: 'https://icon-forge.linkpc.dpdns.org/Icon-Forge_OG.png', 
         width: 1200,
         height: 630,
         alt: 'Icon Forge PWA Icon Generator',
       },
     ],
-    locale: 'zh_CN', // 如果是主语言
+    locale: 'zh_CN',
     type: 'website',
   },
 
@@ -70,7 +70,7 @@ export const metadata = {
     title: 'Icon Forge - PWA Icon Generator',
     description: '为您的 PWA 和 Web 应用一键生成生产级图标。',
     creator: '@SinspireX', // Twitter 账号
-    images: ['https://icon-forge-two.vercel.app/Icon-Forge_OG.png'], // 同 Open Graph 图片
+    images: ['https://icon-forge.linkpc.dpdns.org/Icon-Forge_OG.png'], // 同 Open Graph 图片
   },
 
   // 多语言设置 (用于搜索引擎的 Hreflang)
