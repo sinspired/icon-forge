@@ -39,13 +39,10 @@ export async function generateIcons(inputBuffer, options = {}) {
       : appBackground;
 
     // B. 计算缩放逻辑
-    // 目标：以短边铺满为 100% (Scale=1.0 时效果等同于 cover)
     const userScale = isMaskable ? (cfg.goldenRatio * 0.8) : cfg.goldenRatio;
-    const longEdge = Math.max(srcWidth, srcHeight);
+    const shortEdge = Math.min(srcWidth, srcHeight);
     
-    // 基准比例：让长边等于目标尺寸
-    const baseRatio = targetSize / longEdge;
-    // 最终比例：应用用户的缩放
+    const baseRatio = targetSize / shortEdge;
     const finalRatio = baseRatio * userScale;
 
     const resizeWidth = Math.round(srcWidth * finalRatio);
@@ -55,16 +52,34 @@ export async function generateIcons(inputBuffer, options = {}) {
     let fgChain = sharp(inputBuffer).resize({
       width: resizeWidth,
       height: resizeHeight,
-      fit: 'fill', // 强制缩放到计算好的尺寸
+      fit: 'fill',
     });
 
-    // 仅 SVG 允许改色
+    // 使用“遮罩”代替“染色”
+    // 仅 SVG 且 不是原色模式时，执行强制改色
     if (isSvg && !keepOriginalColor) {
-      fgChain = fgChain.tint(cfg.iconColor);
+      // 1. 先把 SVG 渲染成 Buffer (带透明通道的形状)
+      const shapeBuffer = await fgChain.png().toBuffer();
+
+      // 2. 创建一个纯色的矩形 (颜色为 iconColor)，尺寸和 resize 后的图标一样
+      fgChain = sharp({
+        create: {
+          width: resizeWidth,
+          height: resizeHeight,
+          channels: 4,
+          background: cfg.iconColor // 使用用户选择的前景色
+        }
+      })
+      // 3. 使用 shapeBuffer 作为遮罩 (dest-in)
+      // 原理：保留"纯色矩形"中与"图标形状"重叠的部分
+      .composite([{
+        input: shapeBuffer,
+        blend: 'dest-in' 
+      }]);
     }
 
-    // 手动裁剪 (Manual Crop)
-    // 如果缩放后的图比底板大，必须裁剪掉多余部分，否则 composite 会报错
+    // D. 手动裁剪 (Manual Crop)
+    // 注意：如果是遮罩模式，fgChain 现在是一个新的 sharp 实例，extract 依然有效
     if (resizeWidth > targetSize || resizeHeight > targetSize) {
         const extractWidth = Math.min(resizeWidth, targetSize);
         const extractHeight = Math.min(resizeHeight, targetSize);
@@ -82,8 +97,7 @@ export async function generateIcons(inputBuffer, options = {}) {
 
     const fg = await fgChain.png().toBuffer();
 
-    // D. 合成 (Composite)
-    // 此时 fg 的尺寸一定 <= targetSize，可以安全合成
+    // E. 最终合成 (Composite)
     return await sharp({
       create: {
         width: targetSize,
@@ -97,32 +111,23 @@ export async function generateIcons(inputBuffer, options = {}) {
       .toBuffer();
   };
 
-  // === 1. Favicon 处理 (仅限 SVG) ===
-  // 严格执行：非 SVG 格式，不生成 .ico 和 .svg
+  // === 生成文件逻辑 ===
   if (isSvg) {
     const ico16 = await processImage(16, { forceTransparent: true });
     const ico32 = await processImage(32, { forceTransparent: true });
     
     files["favicon.ico"] = await pngToIco([ico16, ico32]);
-    files["favicon.svg"] = inputBuffer; // 原样保存
+    files["favicon.svg"] = inputBuffer;
   }
 
-  // === 2. Web 通用 PNG 图标 (始终生成) ===
   const webSizes = [32, 192, 512];
   for (const size of webSizes) {
     files[`icon-${size}.png`] = await processImage(size, { forceTransparent: true });
   }
-
-  // === 3. 移动端/App 图标 ===
   
-  // iOS (实色)
   files["apple-touch-icon.png"] = await processImage(180, { isMaskable: false, forceTransparent: false });
-
-  // Android Maskable (实色)
   files["maskable-192.png"] = await processImage(192, { isMaskable: true, forceTransparent: false });
   files["maskable-512.png"] = await processImage(512, { isMaskable: true, forceTransparent: false });
-
-  // Android Launch (透明)
   files["android-192.png"] = await processImage(192, { isMaskable: false, forceTransparent: true });
   files["android-512.png"] = await processImage(512, { isMaskable: false, forceTransparent: true });
 
