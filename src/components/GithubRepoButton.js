@@ -7,7 +7,7 @@ export default function GithubRepoButton({ repoUrl }) {
       href={repoUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center px-1.5 py-1.5 rounded-full
+      className="group flex items-center -mr-2 px-1.5 py-1.5 rounded-full
                  bg-zinc-100 dark:bg-zinc-800
                  border border-zinc-200 dark:border-zinc-700
                  hover:bg-zinc-200 dark:hover:bg-zinc-700

@@ -15,7 +15,7 @@ export default function ThemeToggle({ theme, setTheme }) {
   const Icon = currentMode.icon;
 
   return (
-    <div className="relative">
+    <div className="relative -mr-3 md:mr-0">
       <button
         onClick={() => setOpen(!open)}
         className="group flex items-center gap-1 px-2 py-1.5 rounded-full 
