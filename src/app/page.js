@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Upload, Download, Loader2, Copy, Check, Terminal, RotateCcw } from "lucide-react";
+import { Upload, Download, Loader2, AlertTriangle, Terminal, RotateCcw } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import LangToggle from "@/components/LangToggle";
 import { TRANSLATIONS } from "@/i18n/translations";
@@ -9,17 +9,14 @@ import { useIconForge } from "@/hooks/useIconForge";
 import CompactInput from "@/components/CompactInput";
 import MinimalColor from "@/components/MinimalColor";
 import { highlightHtml } from "@/lib/utils";
-import { AlertTriangle } from "lucide-react";
 import VerticalSlider from "@/components/VerticalSlider";
+import CopyButton from "@/components/CopyButton";
 
 
 export default function Home() {
   const [theme, setTheme] = useState('system');
   const [lang, setLang] = useState('zh');
-  const [copied, setCopied] = useState(false);
   const t = TRANSLATIONS[lang];
-
-  const [enabled, setEnabled] = useState(false);
 
   const {
     file, preview, loading, resultHtml, config, isSvg,
@@ -50,13 +47,6 @@ export default function Home() {
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [theme]);
-
-  const copyToClipboard = () => {
-    if (!resultHtml) return;
-    navigator.clipboard.writeText(resultHtml);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   return (
     <div className="min-h-screen w-full bg-[#f8f9fa] dark:bg-black text-zinc-900 dark:text-zinc-100 font-sans flex flex-col items-center lg:p-4 lg:px-8 lg:py-0 transition-colors duration-500">
@@ -290,9 +280,9 @@ export default function Home() {
                   <Terminal className="w-4 h-4 text-emerald-500" />{t.htmlTitle}
                 </div>
                 {resultHtml && (
-                  <button onClick={copyToClipboard} className="px-2.5 py-1 text-[10px] font-bold bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 rounded-sm transition-colors flex items-center gap-1.5">
-                    {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}{copied ? t.copied : t.copy}
-                  </button>
+                  <div>
+                  <CopyButton text={resultHtml} />
+                  </div>
                 )}
               </div>
 
