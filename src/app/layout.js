@@ -70,7 +70,7 @@ export const metadata = {
     title: 'Icon Forge - PWA Icon Generator',
     description: '为您的 PWA 和 Web 应用一键生成生产级图标。',
     creator: '@SinspireX', // Twitter 账号
-    images: ['https://icon-forge-two.vercel.app/Icon-Forege_UI.png'], // 同 Open Graph 图片
+    images: ['https://icon-forge-two.vercel.app/Icon-Forge_OG.png'], // 同 Open Graph 图片
   },
 
   // 多语言设置 (用于搜索引擎的 Hreflang)
