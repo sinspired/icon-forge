@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Upload, Download, Loader2, AlertTriangle, Terminal, RotateCcw } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 import LangToggle from "@/components/LangToggle";
+import GithubRepoButton from "./GithubRepoButton";
 import { TRANSLATIONS } from "@/i18n/translations";
 import { useIconForge } from "@/hooks/useIconForge";
 import CompactInput from "@/components/CompactInput";
@@ -68,6 +69,7 @@ export default function IconForgeApp() {
           </div>
           <div className="flex items-center gap-4 lg:gap-5">
             <LangToggle lang={lang} setLang={setLang} />
+            <GithubRepoButton repoUrl="https://github.com/sinspired/icon-forge" />
             <ThemeToggle theme={theme} setTheme={setTheme} />
           </div>
         </header>
