@@ -20,7 +20,7 @@ export default function LangToggle({ lang, setLang }) {
                        text-white dark:text-zinc-900 
                        px-1 py-0.5 rounded-full shadow-sm 
                        border border-white dark:border-zinc-900">
-        {lang === "zh" ? "CN" : "EN"}
+        {lang === "zh" ? "中" : "EN"}
       </span>
 
       {/* Tooltip */}
