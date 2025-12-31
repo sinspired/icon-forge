@@ -54,7 +54,7 @@ export const metadata = {
     siteName: "Icon Forge",
     images: [
       {
-        url: 'https://icon-forge-two.vercel.app/Icon-Forege_UI.png', 
+        url: 'https://icon-forge-two.vercel.app/Icon-Forge_OG.png', 
         width: 1200,
         height: 630,
         alt: 'Icon Forge PWA Icon Generator',
