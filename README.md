@@ -7,10 +7,10 @@
 
 <a href="https://nextjs.org/">
  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-16.1.1-black?style=flat-square&logo=next.js" />
- </a>
+</a>
 <a href="https://tailwindcss.com/">
  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-4.1-blue?style=flat-square&logo=tailwind-css" />
- </a>
+</a>
 <img alt="Sharp" src="https://img.shields.io/badge/Powered%20by-Sharp-green?style=flat-square" />
 
 <br/>
@@ -18,6 +18,7 @@
 <img alt="Icon Forge UI" src="public/Icon-Forge_OG.png" width="860" />
 
 </div>
+
 
 ## ✨ 功能特性
 
