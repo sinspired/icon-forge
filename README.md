@@ -2,7 +2,7 @@
 <div align="center">
 
 <h1>🎨 Icon Forge</h1>
-**现代 Web / PWA 图标一站式生成器**
+<strong>现代 Web / PWA 图标一站式生成器</strong>
 <p>一键生成 <code>PWA</code> 与 <code>Web</code> 应用全套图标、<code>manifest</code> 以及可直接拷贝的 <code>HTML</code> 片段。</p>
 
 <a href="https://nextjs.org/">
