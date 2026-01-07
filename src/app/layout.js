@@ -25,23 +25,23 @@ export const metadata = {
   authors: [{ name: "sinspired", url: "https://github.com/sinspired/icon-forge" }], 
 
   // PWA Manifest 链接
-  manifest: '/manifest.json', 
+  manifest: 'manifest.json', 
 
   // 图标配置 (对应 HTML <link rel="icon"> 等标签)
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },           // <link rel="icon" href="/favicon.ico" sizes="any">
-      { url: '/favicon.svg', type: 'image/svg+xml' }, // <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-      { url: '/icons/icon-32.png', type: 'image/png', sizes: '32x32' }, // <link rel="icon" type="image/png" href="/icons/icon-32.png" sizes="32x32">
-      { url: '/icons/icon-16.png', type: 'image/png', sizes: '16x16' }, 
+      { url: 'favicon.ico', sizes: 'any' },           // <link rel="icon" href="favicon.ico" sizes="any">
+      { url: 'favicon.svg', type: 'image/svg+xml' }, // <link rel="icon" type="image/svg+xml" href="favicon.svg">
+      { url: 'icons/icon-32.png', type: 'image/png', sizes: '32x32' }, // <link rel="icon" type="image/png" href="icons/icon-32.png" sizes="32x32">
+      { url: 'icons/icon-16.png', type: 'image/png', sizes: '16x16' }, 
     ],
     // Apple Touch Icon
     apple: [
-      { url: '/icons/apple-touch-icon.png' },          // <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+      { url: 'icons/apple-touch-icon.png' },          // <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
     ],
     // Safari Pinned Tab Icon (通常是纯色 SVG)
     safariPinnedTab: {
-      url: '/favicon.svg',
+      url: 'favicon.svg',
       color: '#ffffff',
     },
   },

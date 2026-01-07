@@ -49,14 +49,14 @@ export function useIconForge(t) {
             ``,
             `<!-- Favicon -->`,
             // 只有 SVG 才生成 ico 和 svg 标签
-            isSvg ? `<link rel="icon" href="/favicon.ico" sizes="any">` : null,
-            isSvg ? `<link rel="icon" type="image/svg+xml" href="/favicon.svg">` : null,
+            isSvg ? `<link rel="icon" href="favicon.ico" sizes="any">` : null,
+            isSvg ? `<link rel="icon" type="image/svg+xml" href="favicon.svg">` : null,
             // PNG 版本始终保留作为 fallback
-            `<link rel="icon" type="image/png" href="/icons/icon-32.png" sizes="32x32">`,
+            `<link rel="icon" type="image/png" href="icons/icon-32.png" sizes="32x32">`,
             ``,
             `<!-- Mobile App -->`,
-            `<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">`,
-            `<link rel="manifest" href="/manifest.json">`
+            `<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">`,
+            `<link rel="manifest" href="manifest.json">`
         ];
 
         // 移除 null 项并用换行符连接

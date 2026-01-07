@@ -63,10 +63,10 @@ export async function POST(req) {
       background_color: manifestBg,
       theme_color: brand,
       icons: [
-        { src: "/icons/android-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
-        { src: "/icons/android-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
-        { src: "/icons/maskable-192.png", sizes: "192x192", type: "image/png", purpose: "maskable" },
-        { src: "/icons/maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" }
+        { src: "icons/android-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+        { src: "icons/android-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+        { src: "icons/maskable-192.png", sizes: "192x192", type: "image/png", purpose: "maskable" },
+        { src: "icons/maskable-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" }
       ]
     };
     zip.file("manifest.json", JSON.stringify(manifest, null, 2));
@@ -79,12 +79,12 @@ export async function POST(req) {
       `<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">`,
       
       // 仅当存在时才添加 (非 SVG 时会自动消失)
-      hasIco ? `<link rel="icon" href="/favicon.ico" sizes="any">` : null,
-      hasSvg ? `<link rel="icon" type="image/svg+xml" href="/favicon.svg">` : null,
+      hasIco ? `<link rel="icon" href="favicon.ico" sizes="any">` : null,
+      hasSvg ? `<link rel="icon" type="image/svg+xml" href="favicon.svg">` : null,
       
-      `<link rel="icon" type="image/png" href="/icons/icon-32.png" sizes="32x32">`,
-      `<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">`,
-      `<link rel="manifest" href="/manifest.json">`
+      `<link rel="icon" type="image/png" href="icons/icon-32.png" sizes="32x32">`,
+      `<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">`,
+      `<link rel="manifest" href="manifest.json">`
     ];
     
     const htmlSnippet = htmlLines.filter(Boolean).join('\n');
